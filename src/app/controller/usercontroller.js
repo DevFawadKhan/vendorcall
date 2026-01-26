@@ -1,4 +1,4 @@
-import prisma from "@/app/database/prisma";
+import prisma from "@/app/lib/prisma";
 
 export const createUser = async (data) => {
   console.log(data);

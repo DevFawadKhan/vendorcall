@@ -95,10 +95,29 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  name: 'name',
   email: 'email',
-  password: 'password',
-  role: 'role',
+  phone: 'phone',
+  passwordHash: 'passwordHash',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  userType: 'userType',
+  avatarUrl: 'avatarUrl',
+  isVerified: 'isVerified',
+  isActive: 'isActive',
+  lastLogin: 'lastLogin',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  metadata: 'metadata'
+};
+
+exports.Prisma.UserProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  bio: 'bio',
+  languages: 'languages',
+  notificationPreferences: 'notificationPreferences',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -108,23 +127,93 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.Role = exports.$Enums.Role = {
-  USER: 'USER',
-  VENDOR: 'VENDOR',
-  ADMIN: 'ADMIN'
+exports.UserType = exports.$Enums.UserType = {
+  customer: 'customer',
+  provider: 'provider',
+  admin: 'admin'
+};
+
+exports.Gender = exports.$Enums.Gender = {
+  male: 'male',
+  female: 'female',
+  other: 'other',
+  prefer_not_to_say: 'prefer_not_to_say'
+};
+
+exports.DocumentType = exports.$Enums.DocumentType = {
+  license: 'license',
+  certification: 'certification',
+  insurance: 'insurance',
+  id_proof: 'id_proof',
+  other: 'other'
+};
+
+exports.BookingStatus = exports.$Enums.BookingStatus = {
+  pending: 'pending',
+  confirmed: 'confirmed',
+  assigned: 'assigned',
+  dispatched: 'dispatched',
+  in_progress: 'in_progress',
+  completed: 'completed',
+  cancelled: 'cancelled',
+  refunded: 'refunded'
+};
+
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  pending: 'pending',
+  paid: 'paid',
+  failed: 'failed',
+  refunded: 'refunded'
+};
+
+exports.PaymentMethod = exports.$Enums.PaymentMethod = {
+  credit_card: 'credit_card',
+  debit_card: 'debit_card',
+  paypal: 'paypal',
+  apple_pay: 'apple_pay',
+  google_pay: 'google_pay',
+  cash: 'cash'
+};
+
+exports.VerificationStatus = exports.$Enums.VerificationStatus = {
+  pending: 'pending',
+  verified: 'verified',
+  rejected: 'rejected'
+};
+
+exports.AddressType = exports.$Enums.AddressType = {
+  home: 'home',
+  work: 'work',
+  other: 'other'
 };
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  UserProfile: 'UserProfile'
 };
 /**
  * Create the Client
@@ -134,10 +223,10 @@ const config = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  // url  = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  USER\n  VENDOR\n  ADMIN\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  name      String?\n  email     String   @unique\n  password  String\n  role      Role     @default(USER)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n"
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  // url  = env(\"DATABASE_URL\")\n}\n\n// Enums\nenum UserType {\n  customer\n  provider\n  admin\n}\n\nenum Gender {\n  male\n  female\n  other\n  prefer_not_to_say\n}\n\nenum DocumentType {\n  license\n  certification\n  insurance\n  id_proof\n  other\n}\n\nenum BookingStatus {\n  pending\n  confirmed\n  assigned\n  dispatched\n  in_progress\n  completed\n  cancelled\n  refunded\n}\n\nenum PaymentStatus {\n  pending\n  paid\n  failed\n  refunded\n}\n\nenum PaymentMethod {\n  credit_card\n  debit_card\n  paypal\n  apple_pay\n  google_pay\n  cash\n}\n\nenum VerificationStatus {\n  pending\n  verified\n  rejected\n}\n\nenum AddressType {\n  home\n  work\n  other\n}\n\n// Models\nmodel User {\n  // id              String           @id @default(uuid())\n  id           Int       @id @default(autoincrement())\n  email        String    @unique\n  phone        String?\n  passwordHash String    @map(\"password_hash\")\n  firstName    String?   @map(\"first_name\")\n  lastName     String?   @map(\"last_name\")\n  userType     UserType  @map(\"user_type\")\n  avatarUrl    String?   @map(\"avatar_url\")\n  isVerified   Boolean   @default(false) @map(\"is_verified\")\n  isActive     Boolean   @default(true) @map(\"is_active\")\n  lastLogin    DateTime? @map(\"last_login\")\n  createdAt    DateTime  @default(now()) @map(\"created_at\")\n  updatedAt    DateTime  @updatedAt @map(\"updated_at\")\n  metadata     Json?     @default(\"{}\")\n\n  // Relations\n  profile UserProfile?\n  // provider       ServiceProvider?\n  // addresses      UserAddress[]\n  // bookings       Booking[]\n  // payments       Payment[]\n  // reviews        Review[]\n  // notifications  Notification[]\n  // paymentMethods CustomerPaymentMethod[]\n\n  @@map(\"users\")\n}\n\nmodel UserProfile {\n  id                      String    @id @default(uuid()) @map(\"profile_id\")\n  userId                  Int       @unique @map(\"user_id\")\n  dateOfBirth             DateTime? @map(\"date_of_birth\")\n  gender                  Gender?\n  bio                     String?\n  languages               String[]\n  notificationPreferences Json      @default(\"{\\\"email\\\": true, \\\"sms\\\": true, \\\"push\\\": true, \\\"marketing\\\": false}\")\n  createdAt               DateTime  @default(now()) @map(\"created_at\")\n  updatedAt               DateTime  @updatedAt @map(\"updated_at\")\n\n  // Relations\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map(\"userprofiles\")\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"password_hash\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"first_name\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"last_name\"},{\"name\":\"userType\",\"kind\":\"enum\",\"type\":\"UserType\",\"dbName\":\"user_type\"},{\"name\":\"avatarUrl\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"avatar_url\"},{\"name\":\"isVerified\",\"kind\":\"scalar\",\"type\":\"Boolean\",\"dbName\":\"is_verified\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\",\"dbName\":\"is_active\"},{\"name\":\"lastLogin\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"last_login\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"metadata\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"profile\",\"kind\":\"object\",\"type\":\"UserProfile\",\"relationName\":\"UserToUserProfile\"}],\"dbName\":\"users\"},\"UserProfile\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"profile_id\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"user_id\"},{\"name\":\"dateOfBirth\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"date_of_birth\"},{\"name\":\"gender\",\"kind\":\"enum\",\"type\":\"Gender\"},{\"name\":\"bio\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"languages\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"notificationPreferences\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserProfile\"}],\"dbName\":\"userprofiles\"}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
       getRuntime: async () => require('./query_compiler_fast_bg.js'),

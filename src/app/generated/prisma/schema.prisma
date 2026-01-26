@@ -14,18 +14,111 @@ datasource db {
   // url  = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  VENDOR
-  ADMIN
+// Enums
+enum UserType {
+  customer
+  provider
+  admin
 }
 
+enum Gender {
+  male
+  female
+  other
+  prefer_not_to_say
+}
+
+enum DocumentType {
+  license
+  certification
+  insurance
+  id_proof
+  other
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  assigned
+  dispatched
+  in_progress
+  completed
+  cancelled
+  refunded
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+  refunded
+}
+
+enum PaymentMethod {
+  credit_card
+  debit_card
+  paypal
+  apple_pay
+  google_pay
+  cash
+}
+
+enum VerificationStatus {
+  pending
+  verified
+  rejected
+}
+
+enum AddressType {
+  home
+  work
+  other
+}
+
+// Models
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // id              String           @id @default(uuid())
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  phone        String?
+  passwordHash String    @map("password_hash")
+  firstName    String?   @map("first_name")
+  lastName     String?   @map("last_name")
+  userType     UserType  @map("user_type")
+  avatarUrl    String?   @map("avatar_url")
+  isVerified   Boolean   @default(false) @map("is_verified")
+  isActive     Boolean   @default(true) @map("is_active")
+  lastLogin    DateTime? @map("last_login")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  metadata     Json?     @default("{}")
+
+  // Relations
+  profile UserProfile?
+  // provider       ServiceProvider?
+  // addresses      UserAddress[]
+  // bookings       Booking[]
+  // payments       Payment[]
+  // reviews        Review[]
+  // notifications  Notification[]
+  // paymentMethods CustomerPaymentMethod[]
+
+  @@map("users")
+}
+
+model UserProfile {
+  id                      String    @id @default(uuid()) @map("profile_id")
+  userId                  Int       @unique @map("user_id")
+  dateOfBirth             DateTime? @map("date_of_birth")
+  gender                  Gender?
+  bio                     String?
+  languages               String[]
+  notificationPreferences Json      @default("{\"email\": true, \"sms\": true, \"push\": true, \"marketing\": false}")
+  createdAt               DateTime  @default(now()) @map("created_at")
+  updatedAt               DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("userprofiles")
 }
