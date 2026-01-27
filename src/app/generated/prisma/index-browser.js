@@ -152,7 +152,7 @@ exports.Prisma.UserProfileScalarFieldEnum = {
 exports.Prisma.PasswordResetTokenScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  token: 'token',
+  otp: 'otp',
   expiresAt: 'expiresAt',
   createdAt: 'createdAt'
 };
@@ -160,7 +160,7 @@ exports.Prisma.PasswordResetTokenScalarFieldEnum = {
 exports.Prisma.EmailVerificationTokenScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  token: 'token',
+  otp: 'otp',
   expiresAt: 'expiresAt',
   createdAt: 'createdAt'
 };

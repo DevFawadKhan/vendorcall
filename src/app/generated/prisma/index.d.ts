@@ -3712,25 +3712,27 @@ export namespace Prisma {
   }
 
   export type PasswordResetTokenAvgAggregateOutputType = {
+    id: number | null
     userId: number | null
   }
 
   export type PasswordResetTokenSumAggregateOutputType = {
+    id: number | null
     userId: number | null
   }
 
   export type PasswordResetTokenMinAggregateOutputType = {
-    id: string | null
+    id: number | null
     userId: number | null
-    token: string | null
+    otp: string | null
     expiresAt: Date | null
     createdAt: Date | null
   }
 
   export type PasswordResetTokenMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
     userId: number | null
-    token: string | null
+    otp: string | null
     expiresAt: Date | null
     createdAt: Date | null
   }
@@ -3738,7 +3740,7 @@ export namespace Prisma {
   export type PasswordResetTokenCountAggregateOutputType = {
     id: number
     userId: number
-    token: number
+    otp: number
     expiresAt: number
     createdAt: number
     _all: number
@@ -3746,17 +3748,19 @@ export namespace Prisma {
 
 
   export type PasswordResetTokenAvgAggregateInputType = {
+    id?: true
     userId?: true
   }
 
   export type PasswordResetTokenSumAggregateInputType = {
+    id?: true
     userId?: true
   }
 
   export type PasswordResetTokenMinAggregateInputType = {
     id?: true
     userId?: true
-    token?: true
+    otp?: true
     expiresAt?: true
     createdAt?: true
   }
@@ -3764,7 +3768,7 @@ export namespace Prisma {
   export type PasswordResetTokenMaxAggregateInputType = {
     id?: true
     userId?: true
-    token?: true
+    otp?: true
     expiresAt?: true
     createdAt?: true
   }
@@ -3772,7 +3776,7 @@ export namespace Prisma {
   export type PasswordResetTokenCountAggregateInputType = {
     id?: true
     userId?: true
-    token?: true
+    otp?: true
     expiresAt?: true
     createdAt?: true
     _all?: true
@@ -3865,9 +3869,9 @@ export namespace Prisma {
   }
 
   export type PasswordResetTokenGroupByOutputType = {
-    id: string
+    id: number
     userId: number
-    token: string
+    otp: string
     expiresAt: Date
     createdAt: Date
     _count: PasswordResetTokenCountAggregateOutputType | null
@@ -3894,7 +3898,7 @@ export namespace Prisma {
   export type PasswordResetTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    token?: boolean
+    otp?: boolean
     expiresAt?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3903,7 +3907,7 @@ export namespace Prisma {
   export type PasswordResetTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    token?: boolean
+    otp?: boolean
     expiresAt?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3912,7 +3916,7 @@ export namespace Prisma {
   export type PasswordResetTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    token?: boolean
+    otp?: boolean
     expiresAt?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3921,12 +3925,12 @@ export namespace Prisma {
   export type PasswordResetTokenSelectScalar = {
     id?: boolean
     userId?: boolean
-    token?: boolean
+    otp?: boolean
     expiresAt?: boolean
     createdAt?: boolean
   }
 
-  export type PasswordResetTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "token" | "expiresAt" | "createdAt", ExtArgs["result"]["passwordResetToken"]>
+  export type PasswordResetTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "otp" | "expiresAt" | "createdAt", ExtArgs["result"]["passwordResetToken"]>
   export type PasswordResetTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -3943,9 +3947,9 @@ export namespace Prisma {
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
       userId: number
-      token: string
+      otp: string
       expiresAt: Date
       createdAt: Date
     }, ExtArgs["result"]["passwordResetToken"]>
@@ -4372,9 +4376,9 @@ export namespace Prisma {
    * Fields of the PasswordResetToken model
    */
   interface PasswordResetTokenFieldRefs {
-    readonly id: FieldRef<"PasswordResetToken", 'String'>
+    readonly id: FieldRef<"PasswordResetToken", 'Int'>
     readonly userId: FieldRef<"PasswordResetToken", 'Int'>
-    readonly token: FieldRef<"PasswordResetToken", 'String'>
+    readonly otp: FieldRef<"PasswordResetToken", 'String'>
     readonly expiresAt: FieldRef<"PasswordResetToken", 'DateTime'>
     readonly createdAt: FieldRef<"PasswordResetToken", 'DateTime'>
   }
@@ -4804,25 +4808,27 @@ export namespace Prisma {
   }
 
   export type EmailVerificationTokenAvgAggregateOutputType = {
+    id: number | null
     userId: number | null
   }
 
   export type EmailVerificationTokenSumAggregateOutputType = {
+    id: number | null
     userId: number | null
   }
 
   export type EmailVerificationTokenMinAggregateOutputType = {
-    id: string | null
+    id: number | null
     userId: number | null
-    token: string | null
+    otp: string | null
     expiresAt: Date | null
     createdAt: Date | null
   }
 
   export type EmailVerificationTokenMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
     userId: number | null
-    token: string | null
+    otp: string | null
     expiresAt: Date | null
     createdAt: Date | null
   }
@@ -4830,7 +4836,7 @@ export namespace Prisma {
   export type EmailVerificationTokenCountAggregateOutputType = {
     id: number
     userId: number
-    token: number
+    otp: number
     expiresAt: number
     createdAt: number
     _all: number
@@ -4838,17 +4844,19 @@ export namespace Prisma {
 
 
   export type EmailVerificationTokenAvgAggregateInputType = {
+    id?: true
     userId?: true
   }
 
   export type EmailVerificationTokenSumAggregateInputType = {
+    id?: true
     userId?: true
   }
 
   export type EmailVerificationTokenMinAggregateInputType = {
     id?: true
     userId?: true
-    token?: true
+    otp?: true
     expiresAt?: true
     createdAt?: true
   }
@@ -4856,7 +4864,7 @@ export namespace Prisma {
   export type EmailVerificationTokenMaxAggregateInputType = {
     id?: true
     userId?: true
-    token?: true
+    otp?: true
     expiresAt?: true
     createdAt?: true
   }
@@ -4864,7 +4872,7 @@ export namespace Prisma {
   export type EmailVerificationTokenCountAggregateInputType = {
     id?: true
     userId?: true
-    token?: true
+    otp?: true
     expiresAt?: true
     createdAt?: true
     _all?: true
@@ -4957,9 +4965,9 @@ export namespace Prisma {
   }
 
   export type EmailVerificationTokenGroupByOutputType = {
-    id: string
+    id: number
     userId: number
-    token: string
+    otp: string
     expiresAt: Date
     createdAt: Date
     _count: EmailVerificationTokenCountAggregateOutputType | null
@@ -4986,7 +4994,7 @@ export namespace Prisma {
   export type EmailVerificationTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    token?: boolean
+    otp?: boolean
     expiresAt?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -4995,7 +5003,7 @@ export namespace Prisma {
   export type EmailVerificationTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    token?: boolean
+    otp?: boolean
     expiresAt?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -5004,7 +5012,7 @@ export namespace Prisma {
   export type EmailVerificationTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    token?: boolean
+    otp?: boolean
     expiresAt?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -5013,12 +5021,12 @@ export namespace Prisma {
   export type EmailVerificationTokenSelectScalar = {
     id?: boolean
     userId?: boolean
-    token?: boolean
+    otp?: boolean
     expiresAt?: boolean
     createdAt?: boolean
   }
 
-  export type EmailVerificationTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "token" | "expiresAt" | "createdAt", ExtArgs["result"]["emailVerificationToken"]>
+  export type EmailVerificationTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "otp" | "expiresAt" | "createdAt", ExtArgs["result"]["emailVerificationToken"]>
   export type EmailVerificationTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -5035,9 +5043,9 @@ export namespace Prisma {
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
       userId: number
-      token: string
+      otp: string
       expiresAt: Date
       createdAt: Date
     }, ExtArgs["result"]["emailVerificationToken"]>
@@ -5464,9 +5472,9 @@ export namespace Prisma {
    * Fields of the EmailVerificationToken model
    */
   interface EmailVerificationTokenFieldRefs {
-    readonly id: FieldRef<"EmailVerificationToken", 'String'>
+    readonly id: FieldRef<"EmailVerificationToken", 'Int'>
     readonly userId: FieldRef<"EmailVerificationToken", 'Int'>
-    readonly token: FieldRef<"EmailVerificationToken", 'String'>
+    readonly otp: FieldRef<"EmailVerificationToken", 'String'>
     readonly expiresAt: FieldRef<"EmailVerificationToken", 'DateTime'>
     readonly createdAt: FieldRef<"EmailVerificationToken", 'DateTime'>
   }
@@ -5935,7 +5943,7 @@ export namespace Prisma {
   export const PasswordResetTokenScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
-    token: 'token',
+    otp: 'otp',
     expiresAt: 'expiresAt',
     createdAt: 'createdAt'
   };
@@ -5946,7 +5954,7 @@ export namespace Prisma {
   export const EmailVerificationTokenScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
-    token: 'token',
+    otp: 'otp',
     expiresAt: 'expiresAt',
     createdAt: 'createdAt'
   };
@@ -6304,9 +6312,9 @@ export namespace Prisma {
     AND?: PasswordResetTokenWhereInput | PasswordResetTokenWhereInput[]
     OR?: PasswordResetTokenWhereInput[]
     NOT?: PasswordResetTokenWhereInput | PasswordResetTokenWhereInput[]
-    id?: StringFilter<"PasswordResetToken"> | string
+    id?: IntFilter<"PasswordResetToken"> | number
     userId?: IntFilter<"PasswordResetToken"> | number
-    token?: StringFilter<"PasswordResetToken"> | string
+    otp?: StringFilter<"PasswordResetToken"> | string
     expiresAt?: DateTimeFilter<"PasswordResetToken"> | Date | string
     createdAt?: DateTimeFilter<"PasswordResetToken"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -6315,28 +6323,29 @@ export namespace Prisma {
   export type PasswordResetTokenOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
   export type PasswordResetTokenWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    token?: string
+    id?: number
+    userId_otp?: PasswordResetTokenUserIdOtpCompoundUniqueInput
     AND?: PasswordResetTokenWhereInput | PasswordResetTokenWhereInput[]
     OR?: PasswordResetTokenWhereInput[]
     NOT?: PasswordResetTokenWhereInput | PasswordResetTokenWhereInput[]
     userId?: IntFilter<"PasswordResetToken"> | number
+    otp?: StringFilter<"PasswordResetToken"> | string
     expiresAt?: DateTimeFilter<"PasswordResetToken"> | Date | string
     createdAt?: DateTimeFilter<"PasswordResetToken"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "token">
+  }, "id" | "userId_otp">
 
   export type PasswordResetTokenOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
     _count?: PasswordResetTokenCountOrderByAggregateInput
@@ -6350,9 +6359,9 @@ export namespace Prisma {
     AND?: PasswordResetTokenScalarWhereWithAggregatesInput | PasswordResetTokenScalarWhereWithAggregatesInput[]
     OR?: PasswordResetTokenScalarWhereWithAggregatesInput[]
     NOT?: PasswordResetTokenScalarWhereWithAggregatesInput | PasswordResetTokenScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"PasswordResetToken"> | string
+    id?: IntWithAggregatesFilter<"PasswordResetToken"> | number
     userId?: IntWithAggregatesFilter<"PasswordResetToken"> | number
-    token?: StringWithAggregatesFilter<"PasswordResetToken"> | string
+    otp?: StringWithAggregatesFilter<"PasswordResetToken"> | string
     expiresAt?: DateTimeWithAggregatesFilter<"PasswordResetToken"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"PasswordResetToken"> | Date | string
   }
@@ -6361,9 +6370,9 @@ export namespace Prisma {
     AND?: EmailVerificationTokenWhereInput | EmailVerificationTokenWhereInput[]
     OR?: EmailVerificationTokenWhereInput[]
     NOT?: EmailVerificationTokenWhereInput | EmailVerificationTokenWhereInput[]
-    id?: StringFilter<"EmailVerificationToken"> | string
+    id?: IntFilter<"EmailVerificationToken"> | number
     userId?: IntFilter<"EmailVerificationToken"> | number
-    token?: StringFilter<"EmailVerificationToken"> | string
+    otp?: StringFilter<"EmailVerificationToken"> | string
     expiresAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
     createdAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -6372,28 +6381,29 @@ export namespace Prisma {
   export type EmailVerificationTokenOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
   export type EmailVerificationTokenWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    token?: string
+    id?: number
+    userId_otp?: EmailVerificationTokenUserIdOtpCompoundUniqueInput
     AND?: EmailVerificationTokenWhereInput | EmailVerificationTokenWhereInput[]
     OR?: EmailVerificationTokenWhereInput[]
     NOT?: EmailVerificationTokenWhereInput | EmailVerificationTokenWhereInput[]
     userId?: IntFilter<"EmailVerificationToken"> | number
+    otp?: StringFilter<"EmailVerificationToken"> | string
     expiresAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
     createdAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "token">
+  }, "id" | "userId_otp">
 
   export type EmailVerificationTokenOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
     _count?: EmailVerificationTokenCountOrderByAggregateInput
@@ -6407,9 +6417,9 @@ export namespace Prisma {
     AND?: EmailVerificationTokenScalarWhereWithAggregatesInput | EmailVerificationTokenScalarWhereWithAggregatesInput[]
     OR?: EmailVerificationTokenScalarWhereWithAggregatesInput[]
     NOT?: EmailVerificationTokenScalarWhereWithAggregatesInput | EmailVerificationTokenScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"EmailVerificationToken"> | string
+    id?: IntWithAggregatesFilter<"EmailVerificationToken"> | number
     userId?: IntWithAggregatesFilter<"EmailVerificationToken"> | number
-    token?: StringWithAggregatesFilter<"EmailVerificationToken"> | string
+    otp?: StringWithAggregatesFilter<"EmailVerificationToken"> | string
     expiresAt?: DateTimeWithAggregatesFilter<"EmailVerificationToken"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"EmailVerificationToken"> | Date | string
   }
@@ -6626,111 +6636,105 @@ export namespace Prisma {
   }
 
   export type PasswordResetTokenCreateInput = {
-    id?: string
-    token: string
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutPasswordResetTokensInput
   }
 
   export type PasswordResetTokenUncheckedCreateInput = {
-    id?: string
+    id?: number
     userId: number
-    token: string
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
 
   export type PasswordResetTokenUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput
   }
 
   export type PasswordResetTokenUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PasswordResetTokenCreateManyInput = {
-    id?: string
+    id?: number
     userId: number
-    token: string
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
 
   export type PasswordResetTokenUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PasswordResetTokenUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmailVerificationTokenCreateInput = {
-    id?: string
-    token: string
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutEmailVerificationTokensInput
   }
 
   export type EmailVerificationTokenUncheckedCreateInput = {
-    id?: string
+    id?: number
     userId: number
-    token: string
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
 
   export type EmailVerificationTokenUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEmailVerificationTokensNestedInput
   }
 
   export type EmailVerificationTokenUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmailVerificationTokenCreateManyInput = {
-    id?: string
+    id?: number
     userId: number
-    token: string
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
 
   export type EmailVerificationTokenUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmailVerificationTokenUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7163,22 +7167,28 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
+  export type PasswordResetTokenUserIdOtpCompoundUniqueInput = {
+    userId: number
+    otp: string
+  }
+
   export type PasswordResetTokenCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
   }
 
   export type PasswordResetTokenAvgOrderByAggregateInput = {
+    id?: SortOrder
     userId?: SortOrder
   }
 
   export type PasswordResetTokenMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
   }
@@ -7186,31 +7196,38 @@ export namespace Prisma {
   export type PasswordResetTokenMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
   }
 
   export type PasswordResetTokenSumOrderByAggregateInput = {
+    id?: SortOrder
     userId?: SortOrder
+  }
+
+  export type EmailVerificationTokenUserIdOtpCompoundUniqueInput = {
+    userId: number
+    otp: string
   }
 
   export type EmailVerificationTokenCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
   }
 
   export type EmailVerificationTokenAvgOrderByAggregateInput = {
+    id?: SortOrder
     userId?: SortOrder
   }
 
   export type EmailVerificationTokenMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
   }
@@ -7218,12 +7235,13 @@ export namespace Prisma {
   export type EmailVerificationTokenMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    token?: SortOrder
+    otp?: SortOrder
     expiresAt?: SortOrder
     createdAt?: SortOrder
   }
 
   export type EmailVerificationTokenSumOrderByAggregateInput = {
+    id?: SortOrder
     userId?: SortOrder
   }
 
@@ -7712,15 +7730,14 @@ export namespace Prisma {
   }
 
   export type EmailVerificationTokenCreateWithoutUserInput = {
-    id?: string
-    token: string
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
 
   export type EmailVerificationTokenUncheckedCreateWithoutUserInput = {
-    id?: string
-    token: string
+    id?: number
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
@@ -7736,15 +7753,14 @@ export namespace Prisma {
   }
 
   export type PasswordResetTokenCreateWithoutUserInput = {
-    id?: string
-    token: string
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
 
   export type PasswordResetTokenUncheckedCreateWithoutUserInput = {
-    id?: string
-    token: string
+    id?: number
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
@@ -7812,9 +7828,9 @@ export namespace Prisma {
     AND?: EmailVerificationTokenScalarWhereInput | EmailVerificationTokenScalarWhereInput[]
     OR?: EmailVerificationTokenScalarWhereInput[]
     NOT?: EmailVerificationTokenScalarWhereInput | EmailVerificationTokenScalarWhereInput[]
-    id?: StringFilter<"EmailVerificationToken"> | string
+    id?: IntFilter<"EmailVerificationToken"> | number
     userId?: IntFilter<"EmailVerificationToken"> | number
-    token?: StringFilter<"EmailVerificationToken"> | string
+    otp?: StringFilter<"EmailVerificationToken"> | string
     expiresAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
     createdAt?: DateTimeFilter<"EmailVerificationToken"> | Date | string
   }
@@ -7839,9 +7855,9 @@ export namespace Prisma {
     AND?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[]
     OR?: PasswordResetTokenScalarWhereInput[]
     NOT?: PasswordResetTokenScalarWhereInput | PasswordResetTokenScalarWhereInput[]
-    id?: StringFilter<"PasswordResetToken"> | string
+    id?: IntFilter<"PasswordResetToken"> | number
     userId?: IntFilter<"PasswordResetToken"> | number
-    token?: StringFilter<"PasswordResetToken"> | string
+    otp?: StringFilter<"PasswordResetToken"> | string
     expiresAt?: DateTimeFilter<"PasswordResetToken"> | Date | string
     createdAt?: DateTimeFilter<"PasswordResetToken"> | Date | string
   }
@@ -8117,57 +8133,55 @@ export namespace Prisma {
   }
 
   export type EmailVerificationTokenCreateManyUserInput = {
-    id?: string
-    token: string
+    id?: number
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
 
   export type PasswordResetTokenCreateManyUserInput = {
-    id?: string
-    token: string
+    id?: number
+    otp: string
     expiresAt: Date | string
     createdAt?: Date | string
   }
 
   export type EmailVerificationTokenUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmailVerificationTokenUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmailVerificationTokenUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PasswordResetTokenUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PasswordResetTokenUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PasswordResetTokenUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    token?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
+    otp?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -1,9 +1,7 @@
-// app/api/auth/forgot-password/route.js
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
-import { createPasswordResetToken } from "@/app/lib/tokens";
+import { createPasswordResetToken } from "@/app/lib/token";
 import { sendPasswordResetEmail } from "@/app/lib/email";
-import { rateLimit } from "@/app/lib/rate-limit";
 import { z } from "zod";
 
 // Validation schema
@@ -15,40 +13,10 @@ export async function POST(request) {
   try {
     const body = await request.json();
 
-    // Rate limiting by email
-    const rateLimitResult = await rateLimit(
-      `forgot-password:${body.email}`,
-      3,
-      60 * 60 * 1000,
-    ); // 3 attempts per hour
-
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: "RATE_LIMITED",
-            message:
-              "Too many password reset attempts. Please try again later.",
-          },
-        },
-        {
-          status: 429,
-          headers: {
-            "X-RateLimit-Limit": "3",
-            "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
-            "X-RateLimit-Reset": Math.ceil(
-              rateLimitResult.reset / 1000,
-            ).toString(),
-          },
-        },
-      );
-    }
-
     // Validate input
     const validation = forgotPasswordSchema.safeParse(body);
     if (!validation.success) {
-      const errors = validation.error.errors.map((err) => ({
+      const errors = validation.error.issues.map((err) => ({
         field: err.path.join("."),
         message: err.message,
       }));
@@ -87,7 +55,7 @@ export async function POST(request) {
           success: true,
           data: {
             message:
-              "If an account exists with this email, you will receive a password reset link shortly.",
+              "If an account exists with this email, you will receive a password reset OTP shortly.",
           },
         },
         { status: 200 },
@@ -108,18 +76,18 @@ export async function POST(request) {
       );
     }
 
-    // Create reset token
+    // Create reset OTP
     const resetToken = await createPasswordResetToken(user.id, prisma);
 
-    // Send reset email
+    // Send reset email with OTP
     const emailResult = await sendPasswordResetEmail(
       user.email,
       `${user.firstName} ${user.lastName}`,
-      resetToken.token,
+      resetToken.otp,
     );
 
     if (!emailResult.success) {
-      // Delete the token if email failed
+      // Delete the OTP if email failed
       await prisma.passwordResetToken.delete({
         where: { id: resetToken.id },
       });
@@ -129,7 +97,7 @@ export async function POST(request) {
           success: false,
           error: {
             code: "EMAIL_SEND_FAILED",
-            message: "Failed to send reset email. Please try again.",
+            message: "Failed to send reset OTP. Please try again.",
           },
         },
         { status: 500 },
@@ -137,17 +105,16 @@ export async function POST(request) {
     }
 
     // Log for security monitoring
-    console.log(
-      `Password reset requested for user: ${user.email} (${user.id})`,
-    );
+    console.log(`Password reset OTP sent for user: ${user.email} (${user.id})`);
 
     return NextResponse.json(
       {
         success: true,
         data: {
           message:
-            "If an account exists with this email, you will receive a password reset link shortly.",
-          expires_in: 3600, // 1 hour in seconds
+            "If an account exists with this email, you will receive a password reset OTP shortly.",
+          expires_in: 900, // 15 minutes in seconds
+          user_id: user.id, // Return user ID for OTP verification
         },
       },
       { status: 200 },

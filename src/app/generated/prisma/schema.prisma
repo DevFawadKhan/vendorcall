@@ -127,27 +127,58 @@ model UserProfile {
 }
 
 // Password Reset Tokens
+// model PasswordResetToken {
+//   id        String   @id @default(uuid())
+//   userId    Int   @map("user_id")
+//   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   token     String   @unique
+//   expiresAt DateTime @map("expires_at")
+//   createdAt DateTime @default(now()) @map("created_at")
+
+//   @@index([userId])
+//   @@map("password_reset_tokens")
+// }
+// // Email Verification Tokens
+// model EmailVerificationToken {
+//   id        String   @id @default(uuid())
+//   userId    Int   @map("user_id")
+//   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   token     String   @unique
+//   expiresAt DateTime @map("expires_at")
+//   createdAt DateTime @default(now()) @map("created_at")
+
+//   @@index([userId])
+//   @@map("email_verification_tokens")
+// }
+
+// Password Reset Tokens
 model PasswordResetToken {
-  id        String   @id @default(uuid())
+  // id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   userId    Int      @map("user_id")
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  token     String   @unique
+  otp       String // Only OTP, no token
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@unique([userId, otp]) // Composite unique constraint
   @@index([userId])
+  @@index([otp])
   @@map("password_reset_tokens")
 }
 
 // Email Verification Tokens
 model EmailVerificationToken {
-  id        String   @id @default(uuid())
+  // id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   userId    Int      @map("user_id")
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  token     String   @unique
+  otp       String // Only OTP, no token
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@unique([userId, otp]) // Composite unique constraint
   @@index([userId])
+  @@index([otp])
   @@map("email_verification_tokens")
 }

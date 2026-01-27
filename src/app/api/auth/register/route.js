@@ -1,32 +1,48 @@
-// // app/api/auth/register/route.js
-// // const { prisma } = require("@/lib/prisma");
-// import { NextResponse as Response } from "next/server";
+// import { NextResponse } from "next/server";
 // import prisma from "@/app/lib/prisma";
-// import { validate, registerSchema } from "@/app/lib/validators.js";
+// import { validate, registerSchema } from "@/app/lib/validators";
 // import { hashPassword, validatePassword } from "@/app/lib/auth";
-// import { generateTokens } from "@/app/lib/jwt.js";
+// import { generateTokens } from "@/app/lib/jwt";
 
-// async function POST(request) {
+// export async function POST(request) {
 //   try {
-//     const body = await request.json();
-//     console.log("Register body:", body);
-//     // Validate input
-//     // const validation = validate(registerSchema, body);
-//     // console.log("Validation result:", validation);
-//     // if (!validation.success) {
-//     //   return Response.json(
-//     //     {
-//     //       success: false,
-//     //       error: {
-//     //         code: "VALIDATION_ERROR",
-//     //         message: "Validation failed",
-//     //         details: validation.errors,
-//     //       },
-//     //     },
-//     //     { status: 422 },
-//     //   );
-//     // }
+//     // Parse request body
+//     let body;
+//     try {
+//       body = await request.json();
+//       console.log("Register request body:", body);
+//     } catch (error) {
+//       return NextResponse.json(
+//         {
+//           success: false,
+//           error: {
+//             code: "INVALID_JSON",
+//             message: "Invalid JSON in request body",
+//           },
+//         },
+//         { status: 400 },
+//       );
+//     }
 
+//     // Validate input
+//     const validation = validate(registerSchema, body);
+//     // console.log("Validation result:", validation);
+
+//     if (!validation.success) {
+//       return NextResponse.json(
+//         {
+//           success: false,
+//           error: {
+//             code: "VALIDATION_ERROR",
+//             message: "Validation failed",
+//             details: validation.errors,
+//           },
+//         },
+//         { status: 422 },
+//       );
+//     }
+
+//     // Extract validated data (note: snake_case from validator)
 //     const {
 //       email,
 //       phone,
@@ -36,14 +52,15 @@
 //       userType,
 //       dateOfBirth,
 //       gender,
-//     } = body;
-//     // Check if user already exists
-//     const existingUser = await prisma.user.findUnique({
+//     } = validation.data;
+
+//     // Check if user exists
+//     const existingUser = await prisma.User.findUnique({
 //       where: { email },
 //     });
 
 //     if (existingUser) {
-//       return Response.json(
+//       return NextResponse.json(
 //         {
 //           success: false,
 //           error: {
@@ -54,55 +71,74 @@
 //         { status: 409 },
 //       );
 //     }
-
-//     // Validate password strength
-//     // const passwordValidation = validatePassword(password);
-//     // if (!passwordValidation.valid) {
-//     //   return Response.json(
-//     //     {
-//     //       success: false,
-//     //       error: {
-//     //         code: "VALIDATION_ERROR",
-//     //         message: passwordValidation.message,
-//     //       },
-//     //     },
-//     //     { status: 422 },
-//     //   );
-//     // }
+//     // Validate password
+//     const passwordValidation = validatePassword(password);
+//     if (!passwordValidation.valid) {
+//       return NextResponse.json(
+//         {
+//           success: false,
+//           error: {
+//             code: "VALIDATION_ERROR",
+//             message: passwordValidation.message,
+//           },
+//         },
+//         { status: 422 },
+//       );
+//     }
 
 //     // Hash password
 //     const passwordHash = await hashPassword(password);
 
-//     // Create user
-//     const user = await prisma.user.create({
-//       data: {
-//         email,
-//         phone,
-//         // passwordHash,
-//         // firstName: firstName,
-//         // lastName: lastName,
-//         // userType: userType,
-//         // dateOfBirth: dateOfBirth,
-//       },
-//     });
-
-//     // Create user profile if additional data provided
-//     if (dateOfBirth || gender) {
-//       await prisma.userProfile.create({
+//     // Create user and profile in transaction
+//     let user;
+//     try {
+//       // Create user first
+//       user = await prisma.User.create({
 //         data: {
-//           userId: user.id,
-//           dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
-//           gender: gender || null,
+//           email,
+//           phone,
+//           passwordHash,
+//           firstName: firstName, // Convert to camelCase for Prisma
+//           lastName: lastName, // Convert to camelCase for Prisma
+//           userType: userType, // Convert to camelCase for Prisma
 //         },
 //       });
+//       // Create profile if data provided
+//       // if (dateOfBirth || gender) {
+//       //   await prisma.userProfiles.create({
+//       //     data: {
+//       //       userId: user.id,
+//       //       dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+//       //       gender: gender || null
+//       //     }
+//       //   });
+//       // }
+//     } catch (dbError) {
+//       console.error("Database error:", dbError);
+
+//       // Handle specific Prisma errors
+//       if (dbError.code === "P2002") {
+//         return NextResponse.json(
+//           {
+//             success: false,
+//             error: {
+//               code: "DUPLICATE_ENTRY",
+//               message: "User with this email already exists",
+//             },
+//           },
+//           { status: 409 },
+//         );
+//       }
+
+//       throw dbError;
 //     }
 
-//     // Generate JWT tokens
-//     const tokens = generateTokens({
-//       userId: user.id,
-//       email: user.email,
-//       userType: user.userType,
-//     });
+//     // Generate tokens
+//     // const tokens = generateTokens({
+//     //   userId: user.id,
+//     //   email: user.email,
+//     //   userType: user.userType,
+//     // });
 
 //     // Prepare response
 //     const responseData = {
@@ -112,12 +148,12 @@
 //       last_name: user.lastName,
 //       user_type: user.userType,
 //       is_verified: user.isVerified,
-//       access_token: tokens.accessToken,
-//       refresh_token: tokens.refreshToken,
-//       expires_in: 3600,
+//       // access_token: tokens.accessToken,
+//       // refresh_token: tokens.refreshToken,
+//       // expires_in: 3600,
 //     };
 
-//     return Response.json(
+//     return NextResponse.json(
 //       {
 //         success: true,
 //         data: responseData,
@@ -125,29 +161,35 @@
 //       { status: 201 },
 //     );
 //   } catch (error) {
-//     console.error("Registration error:", error);
+//     console.error("Registration error:", {
+//       message: error.message,
+//       code: error.code,
+//       name: error.name,
+//       stack: error.stack,
+//     });
 
-//     return Response.json(
+//     // Generic error response
+//     return NextResponse.json(
 //       {
 //         success: false,
 //         error: {
 //           code: "INTERNAL_ERROR",
-//           message: "Something went wrong",
+//           message:
+//             process.env.NODE_ENV === "development"
+//               ? error.message
+//               : "Something went wrong",
 //         },
 //       },
 //       { status: 500 },
 //     );
 //   }
 // }
-
-// export { POST };
-
-// app/api/auth/register/route.js
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
 import { validate, registerSchema } from "@/app/lib/validators";
 import { hashPassword, validatePassword } from "@/app/lib/auth";
-import { generateTokens } from "@/app/lib/jwt";
+import { createEmailVerificationToken } from "@/app/lib/token"; // Import OTP function
+import { sendVerificationEmail } from "@/app/lib/email"; // Import email function
 
 export async function POST(request) {
   try {
@@ -216,6 +258,7 @@ export async function POST(request) {
         { status: 409 },
       );
     }
+
     // Validate password
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
@@ -234,30 +277,34 @@ export async function POST(request) {
     // Hash password
     const passwordHash = await hashPassword(password);
 
-    // Create user and profile in transaction
+    // Create user and send verification OTP in transaction
     let user;
+    let verificationToken;
+
     try {
-      // Create user first
-      user = await prisma.User.create({
-        data: {
-          email,
-          phone,
-          passwordHash,
-          firstName: firstName, // Convert to camelCase for Prisma
-          lastName: lastName, // Convert to camelCase for Prisma
-          userType: userType, // Convert to camelCase for Prisma
-        },
+      // Use transaction to ensure both operations succeed or fail together
+      const result = await prisma.$transaction(async (tx) => {
+        // Create user first
+        const newUser = await tx.User.create({
+          data: {
+            email,
+            phone,
+            passwordHash,
+            firstName,
+            lastName,
+            userType,
+            isVerified: false,
+          },
+        });
+
+        // Create email verification OTP
+        const token = await createEmailVerificationToken(newUser.id, tx);
+
+        return { user: newUser, token };
       });
-      // Create profile if data provided
-      // if (dateOfBirth || gender) {
-      //   await prisma.userProfiles.create({
-      //     data: {
-      //       userId: user.id,
-      //       dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
-      //       gender: gender || null
-      //     }
-      //   });
-      // }
+
+      user = result.user;
+      verificationToken = result.token;
     } catch (dbError) {
       console.error("Database error:", dbError);
 
@@ -278,24 +325,34 @@ export async function POST(request) {
       throw dbError;
     }
 
-    // Generate tokens
-    // const tokens = generateTokens({
-    //   userId: user.id,
-    //   email: user.email,
-    //   userType: user.userType,
-    // });
+    // Send verification email with OTP
+    const emailResult = await sendVerificationEmail(
+      user.email,
+      `${user.firstName} ${user.lastName}`,
+      verificationToken.otp,
+    );
+
+    if (!emailResult.success) {
+      // If email fails, we should still create the user but log the error
+      console.error("Failed to send verification email:", emailResult.error);
+      // Note: User is already created, but we might want to handle this differently
+      // You could delete the user or queue a retry
+    }
 
     // Prepare response
     const responseData = {
-      user_id: user.id,
-      email: user.email,
-      first_name: user.firstName,
-      last_name: user.lastName,
-      user_type: user.userType,
-      is_verified: user.isVerified,
-      // access_token: tokens.accessToken,
-      // refresh_token: tokens.refreshToken,
-      // expires_in: 3600,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        userType: user.userType,
+        isVerified: user.isVerified,
+        phone: user.phone,
+      },
+      requires_verification: true,
+      message:
+        "Account created successfully. Please check your email for the verification OTP.",
     };
 
     return NextResponse.json(
