@@ -29,24 +29,19 @@ const updateProfileSchema = z.object({
     .nullable(),
 });
 
-// Helper function to extract user from request
 function getUserFromRequest(request) {
-  // Since middleware adds user to request object
-  // Check if user exists in request
   if (request.user) {
     return request.user;
   }
 
   // Alternative: check headers if middleware sets them
   const userId = request.headers.get("x-user-id");
-  const email = request.headers.get("x-user-email");
-  const userType = request.headers.get("x-user-type");
+  const userrole = request.headers.get("x-user-role");
 
   if (userId) {
     return {
       userId: parseInt(userId),
-      email,
-      userType,
+      userrole,
     };
   }
 
@@ -58,6 +53,7 @@ export async function GET(request) {
   try {
     // Get user from request (set by middleware)
     const user = getUserFromRequest(request);
+
     console.log("USER", user);
     if (!user) {
       return NextResponse.json(
@@ -96,7 +92,6 @@ export async function GET(request) {
       );
     }
 
-    // Format response
     const profileData = {
       user_id: dbUser.id,
       email: dbUser.email,
@@ -166,7 +161,7 @@ export async function PUT(request) {
     // Validate input
     const validation = updateProfileSchema.safeParse(body);
     if (!validation.success) {
-      const errors = validation.error.errors.map((err) => ({
+      const errors = validation.error.issues.map((err) => ({
         field: err.path.join("."),
         message: err.message,
       }));
@@ -324,7 +319,7 @@ export async function PUT(request) {
 }
 
 // PATCH: Partial update
-export async function PATCH(request) {
-  // PATCH can use the same logic as PUT
-  return PUT(request);
-}
+// export async function PATCH(request) {
+//   // PATCH can use the same logic as PUT
+//   return PUT(request);
+// }
