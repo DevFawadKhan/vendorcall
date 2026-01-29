@@ -165,6 +165,102 @@ exports.Prisma.EmailVerificationTokenScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ServiceCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  iconUrl: 'iconUrl',
+  parentCategoryId: 'parentCategoryId',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ServiceScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  basePrice: 'basePrice',
+  durationMinutes: 'durationMinutes',
+  imageUrls: 'imageUrls',
+  requirements: 'requirements',
+  isPopular: 'isPopular',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ServicePricingTierScalarFieldEnum = {
+  id: 'id',
+  serviceId: 'serviceId',
+  tierName: 'tierName',
+  description: 'description',
+  price: 'price',
+  durationMinutes: 'durationMinutes',
+  includes: 'includes',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ServiceProviderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  businessName: 'businessName',
+  businessRegistrationNumber: 'businessRegistrationNumber',
+  description: 'description',
+  yearsExperience: 'yearsExperience',
+  serviceAreas: 'serviceAreas',
+  radiusKm: 'radiusKm',
+  isInsured: 'isInsured',
+  isBackgroundChecked: 'isBackgroundChecked',
+  totalRating: 'totalRating',
+  reviewCount: 'reviewCount',
+  completedJobs: 'completedJobs',
+  isVerified: 'isVerified',
+  verificationStatus: 'verificationStatus',
+  isAcceptingNewJobs: 'isAcceptingNewJobs',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProviderServiceScalarFieldEnum = {
+  id: 'id',
+  providerId: 'providerId',
+  serviceId: 'serviceId',
+  customPrice: 'customPrice',
+  isAvailable: 'isAvailable',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProviderAvailabilityScalarFieldEnum = {
+  id: 'id',
+  providerId: 'providerId',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  isRecurring: 'isRecurring',
+  validFrom: 'validFrom',
+  validUntil: 'validUntil',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProviderDocumentScalarFieldEnum = {
+  id: 'id',
+  providerId: 'providerId',
+  documentType: 'documentType',
+  documentUrl: 'documentUrl',
+  documentName: 'documentName',
+  expirationDate: 'expirationDate',
+  isVerified: 'isVerified',
+  verifiedBy: 'verifiedBy',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -211,7 +307,14 @@ exports.Prisma.ModelName = {
   User: 'User',
   UserProfile: 'UserProfile',
   PasswordResetToken: 'PasswordResetToken',
-  EmailVerificationToken: 'EmailVerificationToken'
+  EmailVerificationToken: 'EmailVerificationToken',
+  ServiceCategory: 'ServiceCategory',
+  Service: 'Service',
+  ServicePricingTier: 'ServicePricingTier',
+  ServiceProvider: 'ServiceProvider',
+  ProviderService: 'ProviderService',
+  ProviderAvailability: 'ProviderAvailability',
+  ProviderDocument: 'ProviderDocument'
 };
 
 /**
