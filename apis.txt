@@ -1,0 +1,313 @@
+# VendorCall API Documentation
+
+## 1. Service Catalog
+
+### Fetch Service Categories
+- **Method:** GET
+- **URL:** http://localhost:3000/api/services/categories
+- **Query Params:**
+  - `parent_id` (optional): Filter by parent category ID (integer)
+  - `include_inactive` (optional): "true" to include inactive categories
+
+### Create Service (Admin)
+- **Method:** POST
+- **URL:** http://localhost:3000/api/services
+- **Request Body (JSON):**
+```json
+{
+  "name": "Carpet Cleaning",
+  "category_id": 1,
+  "base_price": 80.00,
+  "description": "Professional deep cleaning for carpets.",
+  "duration_minutes": 60,
+  "is_popular": true,
+  "pricing_tiers": [
+    {
+      "tier_name": "Standard",
+      "price": 80.00,
+      "duration_minutes": 60,
+      "description": "1 Room",
+      "includes": ["Vacuuming", "Shampooing"]
+    }
+  ]
+}
+```
+
+### Search Services
+- **Method:** GET
+- **URL:** http://localhost:3000/api/services
+- **Query Params:**
+  - `category_id` (optional): Filter by category ID (integer)
+  - `search` (optional): Search by name or description
+  - `min_price` (optional): Minimum base price
+  - `max_price` (optional): Maximum base price
+  - `is_popular` (optional): "true" to filter popular services
+  - `sort_by` (default: "name"): "price", "name"
+  - `sort_order` (default: "asc"): "asc" or "desc"
+  - `page` (default: 1)
+  - `limit` (default: 20)
+
+### Get Service Details
+- **Method:** GET
+- **URL:** http://localhost:3000/api/services/[service_id]
+- **Example:** http://localhost:3000/api/services/1
+
+---
+
+## 2. Provider Management
+**Authentication Required:** These endpoints generally require an `Authorization: Bearer <token>` header or a valid session cookie.
+
+### Apply to become a Provider
+- **Method:** POST
+- **URL:** http://localhost:3000/api/providers/apply
+- **Request Body (JSON):**
+```json
+{
+  "business_name": "Pro Fixers LLC",
+  "business_registration_number": "REG-1234-5678",
+  "description": "Professional home repair and maintenance services.",
+  "years_experience": 5,
+  "service_areas": ["Downtown", "North Hills", "Westside"],
+  "radius_km": 20,
+  "is_insured": true,
+  "services": [
+    {
+      "service_id": 1,
+      "custom_price": 150.00
+    },
+    {
+      "service_id": 2,
+      "custom_price": 85.00
+    }
+  ],
+  "documents": [
+    {
+      "document_type": "LICENSE",
+      "document_url": "https://storage.example.com/docs/license.pdf",
+      "document_name": "Trade License",
+      "expiration_date": "2025-12-31"
+    },
+    {
+      "document_type": "INSURANCE",
+      "document_url": "https://storage.example.com/docs/insurance.pdf",
+      "document_name": "Liability Insurance",
+      "expiration_date": "2026-06-30"
+    }
+  ],
+  "availability": [
+    {
+      "day_of_week": 1,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "is_recurring": true
+    },
+    {
+      "day_of_week": 2,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "is_recurring": true
+    },
+    {
+      "day_of_week": 3,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "is_recurring": true
+    },
+    {
+      "day_of_week": 4,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "is_recurring": true
+    },
+    {
+      "day_of_week": 5,
+      "start_time": "09:00",
+      "end_time": "17:00",
+      "is_recurring": true
+    }
+  ]
+}
+```
+
+### Update Provider Availability
+- **Method:** PUT
+- **URL:** http://localhost:3000/api/providers/availability
+- **Request Body (JSON):**
+```json
+{
+  "availability": [
+    {
+      "day_of_week": 6,
+      "start_time": "10:00",
+      "end_time": "14:00",
+      "is_recurring": true
+    },
+    {
+      "day_of_week": 0,
+      "start_time": "00:00",
+      "end_time": "00:00",
+      "is_recurring": false
+    }
+  ]
+}
+```
+
+### Get Provider Profile (Public)
+- **Method:** GET
+- **URL:** http://localhost:3000/api/providers/[provider_id]
+- **Example:** http://localhost:3000/api/providers/5
+
+### Search Providers
+- **Method:** GET
+- **URL:** http://localhost:3000/api/providers/search
+- **Query Params:**
+  - `service_id` (REQUIRED): The ID of the service looking for (integer)
+  - `date` (optional): Date to check availability (YYYY-MM-DD)
+  - `time` (optional): Time availability (HH:MM) - *Note: Basic filtering supported*
+  - `page` (default: 1)
+  - `limit` (default: 10)
+- **Example:** http://localhost:3000/api/providers/search?service_id=1&date=2024-03-20
+
+---
+
+## 3. Address Management
+
+### Add Address
+- **Method:** POST
+- **URL:** http://localhost:3000/api/addresses
+- **Request Body (JSON):**
+```json
+{
+  "address_type": "home",
+  "label": "Home",
+  "address_line1": "123 Main Street",
+  "address_line2": "Apt 4B",
+  "city": "New York",
+  "state": "NY",
+  "postal_code": "10001",
+  "country": "US",
+  "is_default": true,
+  "latitude": 40.7128,
+  "longitude": -74.0060
+}
+```
+
+### Get Addresses
+- **URL:** http://localhost:3000/api/addresses
+- **Method:** GET
+
+### Update Address
+- **URL:** http://localhost:3000/api/addresses/[address_id]
+- **Method:** PUT
+
+### Delete Address
+- **URL:** http://localhost:3000/api/addresses/[address_id]
+- **Method:** DELETE
+
+---
+
+## 4. Booking Management
+
+### Create Booking
+- **Method:** POST
+- **URL:** http://localhost:3000/api/bookings
+- **Request Body (JSON):**
+```json
+{
+  "service_id": "1",
+  "provider_id": "5",
+  "scheduled_date": "2024-12-25",
+  "scheduled_time": "14:00",
+  "service_address": "123 Main St, New York, NY",
+  "address_latitude": 40.7128,
+  "address_longitude": -74.0060,
+  "special_instructions": "Bring extra cleaning supplies",
+  "base_price": 149.99,
+  "total_amount": 179.99,
+  "addons": [
+    {
+      "quantity": 2
+    }
+  ]
+}
+```
+
+### Get Bookings
+- **URL:** http://localhost:3000/api/bookings
+- **Method:** GET
+- **Query Params:** `status`, `from_date`, `to_date`, `page`, `limit`
+
+### Get Booking Details
+- **URL:** http://localhost:3000/api/bookings/[booking_id]
+- **Method:** GET
+
+### Cancel Booking
+- **URL:** http://localhost:3000/api/bookings/[booking_id]/cancel
+- **Method:** POST
+- **Body:** `{ "reason": "Change of plans" }`
+
+### Reschedule Booking
+- **URL:** http://localhost:3000/api/bookings/[booking_id]/reschedule
+- **Method:** PUT
+- **Body:** `{ "scheduled_date": "2024-12-26", "scheduled_time": "10:00" }`
+
+---
+
+## 5. Reviews & Ratings
+
+### Submit Review
+- **Method:** POST
+- **URL:** http://localhost:3000/api/reviews
+- **Request Body (JSON):**
+```json
+{
+  "booking_id": "1",
+  "rating": 5,
+  "comment": "Excellent service! Very professional.",
+  "media_urls": ["https://cdn.example.com/review1.jpg"]
+}
+```
+
+### Get Provider Reviews
+- **Method:** GET
+- **URL:** http://localhost:3000/api/providers/[provider_id]/reviews
+- **Query Params:**
+  - `rating` (optional): Filter by rating (1-5)
+  - `sort_by` (optional): "date" (default) or "rating"
+  - `page` (default: 1)
+  - `limit` (default: 10)
+
+### Respond to Review (Provider)
+- **Method:** POST
+- **URL:** http://localhost:3000/api/reviews/[review_id]/respond
+- **Request Body (JSON):**
+```json
+{
+  "response": "Thank you for your feedback! We're glad you enjoyed our service."
+}
+```
+
+---
+
+## 6. Notifications
+
+### Get Notifications
+- **Method:** GET
+- **URL:** http://localhost:3000/api/notifications
+- **Query Params:**
+  - `is_read` (optional): "true" or "false"
+  - `type` (optional): Notification type
+  - `page` (default: 1)
+  - `limit` (default: 20)
+
+### Mark as Read
+- **Method:** PUT
+- **URL:** http://localhost:3000/api/notifications/[notification_id]/read
+
+### Mark All as Read
+- **Method:** PUT
+- **URL:** http://localhost:3000/api/notifications/read-all
+
+### Get Unread Count
+- **Method:** GET
+- **URL:** http://localhost:3000/api/notifications/unread-count

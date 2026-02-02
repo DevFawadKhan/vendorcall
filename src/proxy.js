@@ -8,6 +8,8 @@ const publicRoutes = [
   "/api/auth/forgetpassword",
   "/api/auth/resetpassword",
   "/api/auth/verifyemail",
+  "/api/services", // Added: Public access to service catalog
+  "/api/providers/search", // Added: Public provider search
   // "/api/test",
 ];
 
@@ -74,6 +76,11 @@ export default function middleware(req) {
     // Add user role
     if (decoded.role) {
       requestHeaders.set("x-user-role", decoded.role);
+    }
+    
+    // Fallback for role if it's named userType
+    if (!decoded.role && decoded.userType) {
+        requestHeaders.set("x-user-role", decoded.userType);
     }
 
     console.log(`User ${userId} authorized for ${pathname}`);

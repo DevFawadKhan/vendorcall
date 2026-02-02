@@ -100,8 +100,11 @@ model User {
   serviceProvider     ServiceProvider?
   verifiedDocuments   ProviderDocument[] @relation("VerifiedDocuments")
   // provider       ServiceProvider?
-  // addresses      UserAddress[]
-  // bookings       Booking[]
+  addresses      UserAddress[]
+  bookings       Booking[] @relation("CustomerBookings")
+  cancelledBookings Booking[] @relation("BookingCancelledBy")
+  reviews        Review[] @relation("UserReviews")
+  notifications  Notification[]
   // payments       Payment[]
   // reviews        Review[]
   // notifications  Notification[]
@@ -201,7 +204,10 @@ model Service {
   category         ServiceCategory     @relation(fields: [categoryId], references: [id])
   pricingTiers     ServicePricingTier[]
     // Add Provider relation
-  // providerServices ProviderService[] 
+  // Permissions
+    providerServices ProviderService[] 
+    bookings         Booking[]
+    bookingAddons    BookingAddon[]
   
   @@map("services")
 }
@@ -219,6 +225,7 @@ model ServicePricingTier {
   
   // Relationship
   service          Service    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  bookings         Booking[]
   
   @@map("service_pricing_tiers")
 }
@@ -249,6 +256,8 @@ model ServiceProvider {
   providerServices   ProviderService[]
   availabilities     ProviderAvailability[]
   documents          ProviderDocument[]
+  bookings           Booking[]
+  reviews            Review[]
   
   @@map("service_providers")
 }
@@ -256,18 +265,16 @@ model ServiceProvider {
 model ProviderService {
   id           Int      @id @default(autoincrement()) @map("provider_service_id")
   providerId   Int      @map("provider_id")
-  // serviceId    Int       @map("service_id")
+  serviceId    Int       @map("service_id")
   customPrice  Decimal? @map("custom_price") @db.Decimal(10, 2)
   isAvailable  Boolean  @default(true) @map("is_available")
   createdAt    DateTime @default(now()) @map("created_at")
   
   // Relations
   provider ServiceProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
-  // service  Service         @relation(fields: [serviceId], references: [id])
+  service  Service         @relation(fields: [serviceId], references: [id])
   
-  // @@unique([providerId, serviceId])
-  // dummy
-    @@unique([providerId])
+  @@unique([providerId, serviceId])
   @@map("provider_services")
 }
 
@@ -307,3 +314,134 @@ model ProviderDocument {
   @@map("provider_documents")
 }
 
+// 
+// Address Management
+model UserAddress {
+  id           Int      @id @default(autoincrement()) @map("address_id")
+  userId       Int      @map("user_id")
+  addressType  AddressType @default(home) @map("address_type")
+  
+  label        String?  @db.VarChar(100)
+  addressLine1 String   @map("address_line1")
+  addressLine2 String?  @map("address_line2")
+  city         String   @db.VarChar(100)
+  state        String?  @db.VarChar(100)
+  postalCode   String?  @map("postal_code") @db.VarChar(20)
+  country      String   @default("US") @db.VarChar(100)
+  latitude     Decimal? @db.Decimal(10, 8)
+  longitude    Decimal? @db.Decimal(11, 8)
+  isDefault    Boolean  @default(false) @map("is_default")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_addresses")
+}
+
+model Booking {
+  id                 Int      @id @default(autoincrement()) @map("booking_id")
+  bookingNumber      String   @unique @map("booking_number") @db.VarChar(50)
+  customerId         Int      @map("customer_id")
+  providerId         Int?     @map("provider_id")
+  serviceId          Int      @map("service_id")
+  tierId             Int?     @map("tier_id")
+  bookingStatus      BookingStatus @default(pending) @map("booking_status")
+  scheduledDate      DateTime @map("scheduled_date") @db.Date
+  scheduledTimeStart DateTime @map("scheduled_time_start") @db.Time
+  scheduledTimeEnd   DateTime? @map("scheduled_time_end") @db.Time
+  serviceAddress     String   @map("service_address")
+  addressLatitude    Decimal? @map("address_latitude") @db.Decimal(10, 8)
+  addressLongitude   Decimal? @map("address_longitude") @db.Decimal(11, 8)
+  specialInstructions String? @map("special_instructions")
+  basePrice          Decimal  @map("base_price") @db.Decimal(10, 2)
+  taxAmount          Decimal  @default(0.00) @map("tax_amount") @db.Decimal(10, 2)
+  discountAmount     Decimal  @default(0.00) @map("discount_amount") @db.Decimal(10, 2)
+  totalAmount        Decimal  @map("total_amount") @db.Decimal(10, 2)
+  paymentStatus      PaymentStatus @default(pending) @map("payment_status")
+  cancellationReason String?  @map("cancellation_reason")
+  cancelledBy        Int?     @map("cancelled_by")
+  cancelledAt        DateTime? @map("cancelled_at")
+  completedAt        DateTime? @map("completed_at")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  customer    User            @relation("CustomerBookings", fields: [customerId], references: [id])
+  provider    ServiceProvider? @relation(fields: [providerId], references: [id])
+  service     Service         @relation(fields: [serviceId], references: [id])
+  pricingTier ServicePricingTier? @relation(fields: [tierId], references: [id])
+  cancelledByUser User?       @relation("BookingCancelledBy", fields: [cancelledBy], references: [id])
+  addons      BookingAddon[]
+  review      Review?
+
+  @@map("bookings")
+}
+
+model BookingAddon {
+  id        Int      @id @default(autoincrement()) @map("addon_id")
+  bookingId Int      @map("booking_id")
+  serviceId Int?     @map("service_id")
+  addonName String?  @map("addon_name") @db.VarChar(200)
+  addonPrice Decimal @map("addon_price") @db.Decimal(10, 2)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service Service? @relation(fields: [serviceId], references: [id])
+
+  @@map("booking_addons")
+}
+
+// Reviews & Ratings
+model Review {
+  id                 Int      @id @default(autoincrement()) @map("review_id")
+  bookingId          Int      @unique @map("booking_id")
+  reviewerId         Int      @map("reviewer_id")
+  providerId         Int      @map("provider_id")
+  rating             Int      // Check 1-5 in logic
+  comment            String?  @db.Text
+  response           String?  @db.Text
+  responseAt         DateTime? @map("response_at")
+  isVerifiedBooking  Boolean  @default(true) @map("is_verified_booking")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  booking   Booking         @relation(fields: [bookingId], references: [id])
+  reviewer  User            @relation("UserReviews", fields: [reviewerId], references: [id], onDelete: Cascade)
+  provider  ServiceProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  media     ReviewMedia[]
+
+  @@map("reviews")
+}
+
+model ReviewMedia {
+  id        Int      @id @default(autoincrement()) @map("media_id")
+  reviewId  Int      @map("review_id")
+  mediaUrl  String   @map("media_url")
+  mediaType String   @default("photo") @map("media_type") @db.VarChar(20)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@map("review_media")
+}
+
+// Notifications
+model Notification {
+  id               Int      @id @default(autoincrement()) @map("notification_id")
+  userId           Int      @map("user_id")
+  notificationType String   @map("notification_type") @db.VarChar(50)
+  title            String?  @db.VarChar(200)
+  message          String   @db.Text
+  data             Json?    @default("{}")
+  isRead           Boolean  @default(false) @map("is_read")
+  readAt           DateTime? @map("read_at")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
